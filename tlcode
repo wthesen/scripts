@@ -1,0 +1,318 @@
+# well_log_analysis_framework.py
+import os
+import sys
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+import seaborn as sns
+from matplotlib.colors import ListedColormap
+import lasio
+import glob
+import re
+from scipy.signal import savgol_filter
+from datetime import datetime
+import yaml
+import geopandas as gpd
+from shapely.geometry import Point
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+from fpdf import FPDF
+import json
+
+# Configuration and Constants
+CONFIG_VERSION = "1.0"
+TIMESTAMP = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+USERNAME = os.environ.get("USERNAME", "unknown")
+
+# Logging setup
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("well_analysis.log"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger("WellAnalysis")
+
+class WellLogAnalyzer:
+    """Main class for well log analysis framework."""
+    
+    def __init__(self, config_file=None):
+        """Initialize with configuration from file or defaults."""
+        self.config = self.load_config(config_file)
+        
+        # Setup paths
+        self.base_dir = self.config.get("paths", {}).get("base_dir", os.path.dirname(os.path.abspath(__file__)))
+        self.data_dir = os.path.join(self.base_dir, self.config.get("paths", {}).get("data_subdir", "data"))
+        self.output_dir = os.path.join(self.base_dir, self.config.get("paths", {}).get("output_subdir", "output"))
+        self.tops_file = os.path.join(self.data_dir, self.config.get("paths", {}).get("tops_file", "formation_tops.csv"))
+        self.historical_file = os.path.join(self.data_dir, self.config.get("paths", {}).get("historical_file", "historical_completions.csv"))
+        
+        # Ensure output directory exists
+        os.makedirs(self.output_dir, exist_ok=True)
+        
+        # Load log categories and curve names
+        self.log_categories = self.config.get("log_categories", {})
+        if not self.log_categories:
+            self.log_categories = {
+                'gamma': ['GR', 'GAPI', 'SGR', 'CGR', 'GRDI'],
+                'sp': ['SP', 'SPS', 'SPBL'],
+                'density': ['RHOB', 'RHOZ', 'ZDEN', 'RHOM', 'DRHO'],
+                'neutron': ['NPHI', 'NPOR', 'CNL', 'TNPH', 'PHIN'],
+                'sonic': ['DT', 'DTCO', 'DTSM', 'DTST', 'DELT'],
+                'resistivity': ['RT', 'RILD', 'RILM', 'SFLU', 'ILD', 'ILM', 'LLS', 'LLD', 'SFL', 'SFLR'],
+                'porosity': ['PHIE', 'PHIT', 'PHIN', 'DPHI', 'POR'],
+                'caliper': ['CALI', 'CAL', 'LCAL', 'HCAL', 'CAL2', 'CALD', 'CALN'],
+                'photoelectric': ['PEF', 'PE', 'PEFL']
+            }
+            
+        # Load cutoffs for pay identification
+        self.cutoffs = self.config.get("cutoffs", {})
+        if not self.cutoffs:
+            self.cutoffs = {
+                'porosity': 0.10,
+                'water_saturation': 0.50,
+                'vshale': 0.40,
+                'permeability': 0.1,
+                'net_pay_min': 2.0  # Minimum thickness in ft to count as pay
+            }
+        
+        # Load lithology parameters
+        self.lithology_params = self.config.get("lithology_params", {})
+        if not self.lithology_params:
+            self.lithology_params = {
+                'clean_sand': {'gr_max': 60, 'nphi_max': 0.15, 'rhob_min': 2.65},
+                'silty_sand': {'gr_max': 75, 'nphi_max': 0.25, 'rhob_min': 2.55},
+                'shale': {'gr_min': 100}
+            }
+        
+        # Visualization settings
+        self.viz_settings = self.config.get("visualization", {})
+        if not self.viz_settings:
+            self.viz_settings = {
+                'colors': {
+                    'gamma': 'green',
+                    'sp': 'blue',
+                    'density': 'red',
+                    'neutron': 'cyan',
+                    'sonic': 'purple',
+                    'resistivity': 'black',
+                    'porosity': 'orange',
+                    'caliper': 'brown',
+                    'photoelectric': 'magenta',
+                    'lithology': {
+                        'Clean Sand': 'yellow',
+                        'Silty Sand': 'orange',
+                        'Shale': 'gray',
+                        'Mixed': 'green'
+                    }
+                },
+                'track_layout': [
+                    {'title': 'Gamma / SP', 'categories': ['gamma', 'sp']},
+                    {'title': 'Resistivity', 'categories': ['resistivity']},
+                    {'title': 'Porosity', 'categories': ['neutron', 'density', 'porosity']},
+                    {'title': 'Lithology / Pay', 'categories': ['lithology']}
+                ]
+            }
+            
+        # Initialize containers for processed data
+        self.wells_data = []
+        self.formation_tops = {}
+        self.historical_completions = {}
+        self.recompletion_candidates = []
+        
+        logger.info(f"Initialized Well Log Analyzer with base directory: {self.base_dir}")
+        
+    def load_config(self, config_file):
+        """Load configuration from YAML file."""
+        config = {}
+        
+        # Try to load config file
+        if config_file and os.path.exists(config_file):
+            try:
+                with open(config_file, 'r') as f:
+                    config = yaml.safe_load(f)
+                logger.info(f"Loaded configuration from {config_file}")
+            except Exception as e:
+                logger.warning(f"Failed to load config file: {str(e)}")
+                
+        return config
+        
+    def find_las_files(self):
+        """Find all LAS files in the data directory."""
+        logger.info("Searching for LAS files...")
+        las_files = []
+        
+        for extension in ['.las', '.LAS']:
+            las_files.extend(glob.glob(os.path.join(self.data_dir, f"**/*{extension}"), recursive=True))
+        
+        logger.info(f"Found {len(las_files)} LAS files")
+        return las_files
+        
+    def identify_log_category(self, log_name):
+        """Identify category of log based on its name."""
+        log_upper = log_name.upper()
+        
+        # Check each category
+        for category, log_types in self.log_categories.items():
+            for log_type in log_types:
+                if log_type in log_upper:
+                    return category
+        
+        # Default category
+        return 'other'
+        
+    def remove_spikes(self, data, threshold=3.0):
+        """Remove spikes from log data."""
+        # Handle NaN values
+        mask = np.isnan(data)
+        if np.all(mask):
+            return data
+        
+        valid_data = np.copy(data)
+        valid_indices = ~mask
+        
+        if np.sum(valid_indices) <= 5:  # Not enough points
+            return data
+        
+        # Calculate rolling median and deviation
+        window_size = min(21, len(valid_data[valid_indices]) // 5)
+        if window_size % 2 == 0:
+            window_size += 1  # Make odd
+            
+        if window_size < 3:
+            return data
+        
+        # Calculate rolling statistics
+        try:
+            rolling_median = pd.Series(valid_data[valid_indices]).rolling(
+                window=window_size, center=True).median()
+            rolling_std = pd.Series(valid_data[valid_indices]).rolling(
+                window=window_size, center=True).std()
+            
+            # Fill NaN values using ffill and bfill instead of fillna with method
+            rolling_median = rolling_median.ffill().bfill().values
+            rolling_std = rolling_std.ffill().bfill().values
+            
+            # Identify spikes
+            upper_limit = rolling_median + threshold * rolling_std
+            lower_limit = rolling_median - threshold * rolling_std
+            
+            # Create mask for values outside limits
+            outlier_mask = (valid_data[valid_indices] > upper_limit) | (valid_data[valid_indices] < lower_limit)
+            
+            # Replace spikes with NaN
+            result = np.copy(data)
+            result[valid_indices][outlier_mask] = np.nan
+            
+            return result
+        except Exception as e:
+            logger.warning(f"Error in remove_spikes: {str(e)}")
+            return data
+    
+    def smooth_curve(self, data, window=11, method='savgol'):
+        """Smooth log curve using specified method."""
+        # Handle NaN values
+        mask = np.isnan(data)
+        if np.all(mask):
+            return data
+        
+        if np.sum(~mask) <= window:  # Not enough points
+            return data
+        
+        # Create a copy to avoid modifying the original
+        smoothed = np.copy(data)
+        valid_indices = np.where(~mask)[0]
+        
+        try:
+            if method == 'savgol':
+                # Ensure window is odd
+                if window % 2 == 0:
+                    window += 1
+                    
+                # Apply Savitzky-Golay filter on valid data
+                valid_data = smoothed[valid_indices]
+                if len(valid_data) > window:
+                    poly_order = min(3, window - 1)
+                    valid_smoothed = savgol_filter(valid_data, window, poly_order)
+                    smoothed[valid_indices] = valid_smoothed
+                    
+            else:  # Moving average
+                # Apply simple moving average
+                valid_data = pd.Series(smoothed[valid_indices])
+                valid_smoothed = valid_data.rolling(window=window, center=True).mean()
+                # Use ffill and bfill instead of fillna with method
+                valid_smoothed = valid_smoothed.ffill().bfill()
+                smoothed[valid_indices] = valid_smoothed.values
+            
+            return smoothed
+        except Exception as e:
+            logger.warning(f"Error in smooth_curve: {str(e)}")
+            return data
+    
+    def interpolate_gaps(self, depth, data, max_gap=2.0):
+        """Interpolate small gaps in log data."""
+        # Create a pandas Series for easier interpolation
+        mask = np.isnan(data)
+        if np.all(mask):
+            return data
+        
+        try:
+            # Find average depth step
+            valid_indices = ~mask
+            valid_depths = depth[valid_indices]
+            
+            if len(valid_depths) < 2:
+                return data
+            
+            depth_steps = np.diff(valid_depths)
+            avg_step = np.median(depth_steps)
+            
+            # Calculate max points for interpolation
+            max_points = int(max_gap / avg_step) + 1
+            
+            # Interpolate using pandas
+            s = pd.Series(data, index=depth)
+            interpolated = s.interpolate(limit=max_points)
+            
+            return interpolated.values
+        except Exception as e:
+            logger.warning(f"Error in interpolate_gaps: {str(e)}")
+            return data
+    
+    def normalize_gamma_ray(self, gr_data, p5=None, p95=None):
+        """Normalize gamma ray to 0-100 scale."""
+        # Handle NaN values
+        mask = np.isnan(gr_data)
+        if np.all(mask):
+            return gr_data
+        
+        valid_data = gr_data[~mask]
+        
+        if len(valid_data) < 10:  # Not enough points
+            return gr_data
+        
+        try:
+            # Calculate percentiles if not provided
+            if p5 is None:
+                p5 = np.percentile(valid_data, 5)
+            if p95 is None:
+                p95 = np.percentile(valid_data, 95)
+            
+            # Ensure we don't divide by zero
+            if p95 - p5 <= 0:
+                return gr_data
+            
+            # Normalize to 0-100 scale
+            normalized = 100 * (gr_data - p5) / (p95 - p5)
+            
+            # Clip values to 0-120 range (allow some headroom)
+            normalized = np.clip(normalized, 0, 120)
+            
+            return normalized
+        except Exception as e:
+            logger.warning(f"Error in normalize_gamma_ray: {str(e)}")
+            return gr_data
