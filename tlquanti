@@ -1,0 +1,1153 @@
+
+ 
+TechlogQuanti	index
+c:\program files\techlog 2024.2 (r9274463)\pythonscripts\techlogquanti.py
+# Copyright (c) 2023 SLB
+# SLB Confidential
+
+
+ 
+Modules
+      	 	
+remote_techlog
+
+ 
+Classes
+      	 	
+builtins.object
+DataModel
+
+ 
+class DataModel(builtins.object)
+   	DataModel(ref)
+ 
+
+ 
+ 	Methods defined here:
+__init__(self, ref)
+__init__()
+ 
+Initialize self.  See help(type(self)) for accurate signature.
+__reduce__(self)
+Used by pickle to retrieve the object from a ref_id.
+__repr__(self, *args, **kwargs)
+loadFile(self, *args, **kwargs)
+loadFile(filename)
+ 
+Load file
+ 
+Args:
+    filename (None): 
+ 
+Returns:
+    None: exit status
+writeFile(self, *args, **kwargs)
+writeFile()
+Data descriptors defined here:
+__dict__
+dictionary for instance variables
+__weakref__
+list of weak references to the object
+
+ 
+Functions
+      	 	
+bQv(*args, **kwargs)
+bQv(por: Number, res: Number, rw: Number, fTemp: Number, equation: str, useFixLine: bool, aStar: Number, mStar: Number)
+ 
+Compute bQv, Qv and Waxman B
+ 
+Args:
+    por (Number): [v/v] Porosity
+    res (Number): [ohm.m] Formation Resistivity
+    rw (Number): [ohm.m] Water Resistivity
+    fTemp (Number): [degF] Formation Temperature
+    equation (str): Equation type name {"1978 Waxman B chart", "1972 Waxman B chart original fit", "1972 Waxman B chart revised fit"}
+    useFixLine (bool): use or not the extended line over 392 degF (200 degC)
+    aStar (Number): Waxman-Smits a*
+    mStar (Number): Cementation Exponent Star
+ 
+Returns:
+    dict: output dictionary with the following keys:
+    Number: [S/m]: Waxman BQv
+    Number: [L.S/m]: computed Waxman B
+    Number: [1/L]: computed Volumetric CEC
+bWaxmanFromRw(*args, **kwargs)
+bWaxmanFromRw(rw: Number, fTemp: Number, equation: str='1978 Waxman B chart') -> Number
+ 
+Compute Waxman B from Water Resistivity
+ 
+Args:
+    rw (Number): [ohm.m] Water Resistivity
+    fTemp (Number): [degF] Formation Temperature
+    equation (str): Optional; Equation type name {"1978 Waxman B chart", "1972 Waxman B chart original fit", "1972 Waxman B chart revised fit"}
+ 
+Returns:
+    Number: [L.S/m]: computed Waxman B
+bWaxmanFromSalinity(*args, **kwargs)
+bWaxmanFromSalinity(salinity: Number, fTemp: Number, equation: str='1978 Waxman B chart', useFixLine: bool=False) -> Number
+ 
+Compute Waxman B from Salinity
+ 
+Args:
+    salinity (Number): [ppk] Formation Salinity
+    fTemp (Number): [degF] Formation Temperature
+    equation (str): Optional; Equation type name {"1978 Waxman B chart", "1972 Waxman B chart original fit", "1972 Waxman B chart revised fit"}
+    useFixLine (bool): Optional; use or not the extended line over 392 degF (200 degC)
+ 
+Returns:
+    Number: [L.S/m]: computed Waxman B
+computeRmf(*args, **kwargs)
+computeRmf(salinity: Number, fTemp: Number) -> Number
+ 
+Compute mud filtrate resistivity
+ 
+Args:
+    salinity (Number): [ppm] Mud Salinity
+    fTemp (Number): [degF] Formation Temperature
+ 
+Returns:
+    Number: [ohm.m]: Mud Filtrate Resistivity
+createDataModel() -> TechlogQuanti.DataModel
+createDataModel() -> bool
+ 
+Create a data model
+ 
+Returns:
+    bool: exit status (True if created, False if already exists, or error)
+createQuantiElanWorkflow(*args, **kwargs)
+createQuantiElanWorkflow(name: str, bulkDensity: str='', neutronPorosity: str='', formationResistivity: str='', flushedZoneResistivity: str='', compressionnalSlowness: str='', velocity: str='', porosity: str='', u: str='', qv: str='', ui: List[str]=None, groups: str='') -> int
+ 
+Create Quanti.Elan Workflow method
+ 
+Args:
+    name (str): Quanti.Elan method name
+    bulkDensity (str): Optional; Bulk Density Variable Name
+    neutronPorosity (str): Optional; Neutron Porosity Variable Name
+    formationResistivity (str): Optional; Formation Resistivity Variable Name
+    flushedZoneResistivity (str): Optional; Flushed Zone Resistivity Variable Name
+    compressionnalSlowness (str): Optional; Compressional Slowness Variable Name
+    velocity (str): Optional; Velocity Variable Name
+    porosity (str): Optional; Porosity Variable Name
+    u (str): Optional; U Variable Name
+    qv (str): Optional; QV Variable Name
+    ui (List[str]): Optional; UI Variable Names
+    groups (str): Optional; Groups Variable Name
+ 
+Returns:
+    int: widget Id (-1 if already exists, or error)
+denCorrectionHydrocarbon(*args, **kwargs)
+denCorrectionHydrocarbon(den: Number, por: Number, sxo: Number, salinity: Number, rhoh: Number) -> Number
+ 
+Compute bulk density hydrocarbon correction
+ 
+Args:
+    den (Number): [g/cm3] Bulk Density
+    por (Number): [v/v] Porosity
+    sxo (Number): [v/v] Flushed Zone Water Saturation
+    salinity (Number): [ppm] Mud Salinity
+    rhoh (Number): [g/cm3] Hydrocarbon density
+ 
+Returns:
+    Number: Bulk Density Hydrocarbon Corrected
+fPressFromFluidDensity(*args, **kwargs)
+fPressFromFluidDensity(depth: Number, denFluid: Number) -> Number
+ 
+Compute the formation pressure from drilling fluid density
+ 
+Args:
+    depth (Number): [m] current depth
+    denFluid (Number): [kg/m3] drilling fluid density
+ 
+Returns:
+    Number: [kPa]: Formation pressure
+fPressFromGradient(*args, **kwargs)
+fPressFromGradient(depth: Number, gradient: Number) -> Number
+ 
+Compute the formation pressure from gradient
+ 
+Args:
+    depth (Number): [m] current depth
+    gradient (Number): [kPa/m] pressure gradient value
+ 
+Returns:
+    Number: [kPa]: Formation pressure
+fTempFromGradient(*args, **kwargs)
+fTempFromGradient(depth: Number, topDepth: Number, topTemp: Number, gradient: Number) -> Number
+ 
+Compute the formation temperature from gradient
+ 
+Args:
+    depth (Number): current depth
+    topDepth (Number): top depth
+    topTemp (Number): top temperature
+    gradient (Number): gradient
+ 
+Returns:
+    Number: Formation temperature
+fTempFromInterval(*args, **kwargs)
+fTempFromInterval(depth: Number, topDepth: Number, bottomDepth: Number, topTemp: Number, bottomTemp: Number) -> Number
+ 
+Compute the formation temperature from interval
+ 
+Args:
+    depth (Number): current depth
+    topDepth (Number): top depth
+    bottomDepth (Number): bottom depth
+    topTemp (Number): top temperature
+    bottomTemp (Number): bottom temperature
+ 
+Returns:
+    Number: Formation temperature
+neuCorrectionHydrocarbon(*args, **kwargs)
+neuCorrectionHydrocarbon(neu: Number, por: Number, sxo: Number, salinity: Number, rhomaa: Number, rhoh: Number, Hig: Number, Hif: Number, excavation: bool=False) -> Number
+ 
+Compute neutron porosity hydrocarbon correction
+ 
+Args:
+    neu (Number): [v/v] Neutron Porosity
+    por (Number): [v/v] Porosity
+    sxo (Number): [v/v] Flushed Zone Water Saturation
+    salinity (Number): [ppm] Mud Salinity
+    rhomaa (Number): [g/cm3] Apparent Matrix Density
+    rhoh (Number): [g/cm3] Hydrocarbon density
+    Hig (Number): [v/v] HI gas
+    Hif (Number): [v/v] HI fluid
+    excavation (bool): Optional; 
+ 
+Returns:
+    Number: Neutron Porosity Hydrocarbon Corrected
+porCoreCalibrated(*args, **kwargs)
+porCoreCalibrated(cpor: Number, slope: Number, constant: Number) -> Number
+ 
+Compute the computed porosity using core calibrated method
+ 
+Args:
+    cpor (Number): [v/v] Core Porosity
+    slope (Number): slope
+    constant (Number): [v/v] constant
+ 
+Returns:
+    Number: [v/v]: computed porosity unclipped
+porDeep(*args, **kwargs)
+porDeep(rt: Number, rw: Number, sw: Number, a: Number, m: Number, n: Number) -> Number
+ 
+Compute the computed porosity using deep resistivity
+ 
+Args:
+    rt (Number): [ohm.m] Formation Resistivity
+    rw (Number): [ohm.m] Water Resistivity
+    sw (Number): [v/v] Water Saturation
+    a (Number): [unitless] Tortuosity Factor
+    m (Number): [unitless] Cementation Exponent
+    n (Number): [unitless] Saturation Exponent
+ 
+Returns:
+    Number: [v/v]: computed porosity
+porDensity(*args, **kwargs)
+porDensity(den: Number, denMatrix: Number, denFluid: Number) -> Number
+ 
+Compute the computed porosity unclipped using bulk density
+ 
+Args:
+    den (Number): [g/cm3] Bulk Density
+    denMatrix (Number): [g/cm3] Bulk Density matrix
+    denFluid (Number): [g/cm3] Bulk Density fluid
+ 
+Returns:
+    Number: [v/v]: computed porosity unclipped
+porDielectric(*args, **kwargs)
+porDielectric(tpl: Number, eatt: Number, tplMatrix: Number, tplFluid: Number) -> Number
+ 
+Compute the computed porosity using dielectric log
+ 
+Args:
+    tpl (Number): [ns/m] TPL
+    eatt (Number): [dB/m] EATT
+    tplMatrix (Number): [ns/m] TPL matrix
+    tplFluid (Number): [ns/m] TPL fluid
+ 
+Returns:
+    Number: [v/v]: computed porosity
+porMicrolog(*args, **kwargs)
+porMicrolog(resShallow: Number, resDeep: Number, rmf: Number, kml: Number) -> Number
+ 
+Compute the computed porosity using resistivity logs
+ 
+Args:
+    resShallow (Number): [ohm.m] Shallow Resistivity
+    resDeep (Number): [ohm.m] Deep Resistivity
+    rmf (Number): [ohm.m] Mud Filtrate Resistivity
+    kml (Number): [v/v] correction factor for mud cake effect
+ 
+Returns:
+    Number: [v/v]: computed porosity
+porNeutron(*args, **kwargs)
+porNeutron(neu: Number, neuMatrix: Number, neuFluid: Number) -> Number
+ 
+Compute the unclipped porosity [v/v] using neutron porosity
+ 
+Args:
+    neu (Number): [v/v] Neutron Porosity
+    neuMatrix (Number): [v/v] Neutron Porosity matrix
+    neuFluid (Number): [v/v] Neutron Porosity fluid
+ 
+Returns:
+    Number: [v/v]: Porosity Unclipped
+porNeutronDensity(*args, **kwargs)
+porNeutronDensity(neu: Number, den: Number, denFluid: Number=1, tool: str='Schlumberger CNL-NPHI', salinity: Number=0)
+ 
+Compute the unclipped porosity [v/v] using neutron porosity and bulk density tools values
+ 
+Args:
+    neu (Number): [v/v] Neutron Porosity
+    den (Number): [g/cm3] Bulk Density
+    denFluid (Number): Optional; [g/cm3]: Fluid Density
+    tool (str): Optional; Tool type = {"Schlumberger CNL-NPHI", "Schlumberger CNL-TNPH", "Schlumberger SNP",
+                                                            "Schlumberger APS-APLC", "Schlumberger APS-FPLC", 
+                                                            "Schlumberger Ecoscope BPHI", "Schlumberger Ecoscope TNPH", 
+                                                            "Schlumberger adnVISION 825", "Schlumberger adnVISION 475", "Schlumberger adnVISION 825s", 
+                                                            "Atlas CN 2418/2420", "Atlas CN 2435", "Atlas CN 2446", "Atlas SN", 
+                                                            "Welex DSN", "Welex SN",
+                                                            "Gearhart CNS", "Gearhart SNP", "Halliburton DSN-II", "Halliburton HDSN",
+                                                            "Halliburton CNT-K", "Halliburton DSEN", "Halliburton SNL", "Schlumberger CDN 650",
+                                                            "Schlumberger CDN 8", "Schlumberger adnVISION 675", "Sperry Sun CNP 6.75 in. collar",
+                                                            "Sperry Sun CNP 8 in. collar", "Sperry Sun CTN 4.75 in. collar" ,
+                                                            "Anadrill CDN 6.5 in. collar", "Anadrill CDN 8 in. collar",  "Anadrill ADN 6.75 in. collar" ,
+                                                            "Weatherford TNP 475", "Weatherford TNP 675", "Weatherford TNP 825", "Weatherford MDN", "Weatherford CNT-V", "Weatherford CNT-S", "GE Oil & Gas CNL"}
+    salinity (Number): Optional; [ppm]: salinity
+ 
+Returns:
+    dict: output dictionary with the following keys:
+    Number: [v/v]: Porosity Unclipped
+    Number: [g/cm3]: Apparent Matrix Density
+    Number: [unitless]: Main Lithology
+    Number: [v/v]: Volume of Sandstone
+    Number: [v/v]: Volume of Limestone
+    Number: [v/v]: Volume of Dolomite
+    Number: [v/v]: Volume of Anhydrite
+porNeutronSonic(*args, **kwargs)
+porNeutronSonic(neu: Number, dt: Number, dtFluid: Number) -> Number
+ 
+Compute the computed porosity unclipped using neutron porosity and compressional slowness
+ 
+Args:
+    neu (Number): [v/v] Neutron Porosity
+    dt (Number): [us/ft] Compressional Slowness
+    dtFluid (Number): [us/ft] Compressional Slowness fluid
+ 
+Returns:
+    Number: [v/v]: computed porosity unclipped
+porShallow(*args, **kwargs)
+porShallow(rmf: Number, rxo: Number, sxo: Number, a: Number, m: Number, n: Number) -> Number
+ 
+Compute the computed porosity [v/v] using flushed zone resistivity
+ 
+Args:
+    rmf (Number): [ohm.m] Mud Filtrate Resistivity
+    rxo (Number): [ohm.m] Flushed Zone Resistivity
+    sxo (Number): [v/v] Flushed Zone Water Saturation
+    a (Number): [unitless] Tortuosity Factor
+    m (Number): [unitless] Cementation Exponent
+    n (Number): [unitless] Saturation Exponent
+ 
+Returns:
+    Number: [v/v]: computed porosity
+porSonic(*args, **kwargs)
+porSonic(dt: Number, dtMatrix: Number, dtFluid: Number, equation: str='Raymer-Hunt-Gardner', equationCoef: Number=MissingValue) -> Number
+ 
+Compute the computed porosity unclipped using compressional slowness
+ 
+Args:
+    dt (Number): [us/ft] Compressional Slowness
+    dtMatrix (Number): [us/ft] Compressional Slowness matrix
+    dtFluid (Number): [us/ft] Compressional Slowness fluid
+    equation (str): Optional; equation = {"Raymer-Hunt-Gardner", "Wyllie", "Raiga-Clemenceau", "Field Equation"}
+    equationCoef (Number): Optional; [unitless]: coefficient to be used by the equation
+ 
+Returns:
+    Number: [v/v]: computed porosity unclipped
+porVshCorrected(*args, **kwargs)
+porVshCorrected(porMax: Number, por: Number, porShale: Number, vsh: Number, isPore: bool=False) -> Number
+ 
+Compute the corrected porosity from structured and/or dispersed shale volume
+ 
+Args:
+    porMax (Number): [v/v] Porosity maximum
+    por (Number): [v/v] Porosity
+    porShale (Number): [v/v] Porosity shale
+    vsh (Number): [v/v] Shale Volume
+    isPore (bool): Optional; is Effective Porosity {True or False}
+ 
+Returns:
+    Number: [v/v]: the corrected porosity from structured and/or dispersed shale volume
+poreDensity(*args, **kwargs)
+poreDensity(vsh: Number, phit: Number, denShale: Number, denMatrix: Number, denFluid: Number) -> Number
+ 
+Compute the computed effective porosity unclipped [v/v] using bulk density
+ 
+Args:
+    vsh (Number): [v/v] Shale Volume
+    phit (Number): [v/v] Total porosity
+    denShale (Number): [g/cm3] Bulk Density shale
+    denMatrix (Number): [g/cm3] Bulk Density matrix
+    denFluid (Number): [g/cm3] Bulk Density fluid
+ 
+Returns:
+    Number: [v/v]: computed effective porosity unclipped
+poreNeutron(*args, **kwargs)
+poreNeutron(neu: Number, vsh: Number, neuShale: Number) -> Number
+ 
+Compute the computed effective porosity unclipped using neutron porosity
+ 
+Args:
+    neu (Number): [v/v] Neutron Porosity
+    vsh (Number): [v/v] Shale Volume
+    neuShale (Number): [v/v] Neutron Porosity shale
+ 
+Returns:
+    Number: [v/v]: computed effective porosity unclipped
+poreShearSonic(*args, **kwargs)
+poreShearSonic(por: Number, vsh: Number, dtMatrix: Number, dtShale: Number, dtFluid: Number) -> Number
+ 
+Compute the computed effective porosity unclipped using shear slowness parameters
+ 
+Args:
+    por (Number): [v/v] Porosity
+    vsh (Number): [v/v] Shale Volume
+    dtMatrix (Number): [us/ft] Slowness matrix
+    dtShale (Number): [us/ft] Slowness shale
+    dtFluid (Number): [us/ft] Slowness fluid
+ 
+Returns:
+    Number: [v/v]: computed effective porosity unclipped
+poreSonic(*args, **kwargs)
+poreSonic(vsh: Number, dt: Number, dtMatrix: Number, dtFluid: Number, dtShale: Number, equation: str='Raymer-Hunt-Gardner', equationCoef: Number=MissingValue) -> Number
+ 
+Compute the computed effective porosity unclipped using compressional slowness
+ 
+Args:
+    vsh (Number): [v/v] Shale Volume
+    dt (Number): [us/ft] Compressional Slowness
+    dtMatrix (Number): [us/ft] Compressional Slowness matrix
+    dtFluid (Number): [us/ft] Compressional Slowness fluid
+    dtShale (Number): [us/ft] Compressional Slowness shale
+    equation (str): Optional; equation = {"Raymer-Hunt-Gardner", "Wyllie", "Raiga-Clemenceau", "Field Equation"}
+    equationCoef (Number): Optional; [unitless]: coefficient to be used by the equation
+ 
+Returns:
+    Number: [v/v]: computed effective porosity unclipped
+propGas(*args, **kwargs)
+propGas(fTemp: Number, fPress: Number, gravity: Number)
+ 
+Compute the gas properties
+ 
+Args:
+    fTemp (Number): [degF] Formation Temperature
+    fPress (Number): [psi] Formation Pressure
+    gravity (Number): [dAPI] Gas gravity
+ 
+Returns:
+    dict: output dictionary with the following keys:
+    Number: [g/cm3]: Bulk Density of the gas
+    Number: [v/v]: Hydrogen Index of the gas
+propMethane(*args, **kwargs)
+propMethane(fTemp: Number, fPress: Number)
+ 
+Compute the methane properties
+ 
+Args:
+    fTemp (Number): [degF] Formation Temperature
+    fPress (Number): [psi] Formation Pressure
+ 
+Returns:
+    dict: output dictionary with the following keys:
+    Number: [g/cm3]: Bulk Density of the methane
+    Number: [psi]: Bulk Modulus (Static) of the methane
+    Number: [ft/s]: Velocity of the methane
+    Number: [v/v]: Hydrogen Index of the methane
+propMud(*args, **kwargs)
+propMud(fTemp: Number, rms: Number, mst: Number, rmfs: Number, mfst: Number, rmcs: Number, mcst: Number)
+ 
+Compute the mud properties from formation temperature
+ 
+Args:
+    fTemp (Number): [degC] Formation Temperature
+    rms (Number): [ohm.m] Mud sample resistivity
+    mst (Number): [degC] Mud sample temperature
+    rmfs (Number): [ohm.m] Mud filtrate sample resistivity
+    mfst (Number): [degC] Mud filtrate sample temperature
+    rmcs (Number): [ohm.m] Mud cake sample resistivity
+    mcst (Number): [degC] Mud cake sample temperature
+ 
+Returns:
+    dict: output dictionary with the following keys:
+    Number: [ohm.m]: Mud Resistivity
+    Number: [ohm.m]: Mud Filtrate Resistivity
+    Number: [ohm.m]: Mud Cake Resistivity
+    Number: [ppk]: Mud Salinity
+    Number: [ppk]: Mud Filtrate Salinity
+propOil(*args, **kwargs)
+propOil(fTemp: Number, fPress: Number, oilGravity: Number, gasOilRatio: Number, gasGravity: Number)
+ 
+Compute the formation pressure from drilling fluid density
+ 
+Args:
+    fTemp (Number): [degF] Formation Temperature
+    fPress (Number): [psi] Formation Pressure
+    oilGravity (Number): [dAPI] Dead oil API gravity
+    gasOilRatio (Number): [SCF/B] Gas/Oil ratio
+    gasGravity (Number): [v/v] Gas gravity
+ 
+Returns:
+    dict: output dictionary with the following keys:
+    Number: [g/cm3]: Bulk Density of the oil
+    Number: [psi]: Bulk Modulus (Static) of the oil
+    Number: [ft/s]: Velocity of the oil
+    Number: [v/v]: Hydrogen Index of the oil
+    Number: [cP]: Viscosity of the oil
+    Number: [psi]: Oil bubble point pressure
+propWater(*args, **kwargs)
+propWater(fTemp: Number, fPress: Number, salinity: Number)
+ 
+Compute the water properties
+ 
+Args:
+    fTemp (Number): [degF] Formation Temperature
+    fPress (Number): [psi] Formation Pressure
+    salinity (Number): [ppk] Salinity
+ 
+Returns:
+    dict: output dictionary with the following keys:
+    Number: [g/cm3]: Bulk Density of the water
+    Number: [psi]: Bulk Modulus (Static) of the water
+    Number: [ft/s]: Velocity of the water
+    Number: [v/v]: Hydrogen Index of the water
+    Number: [cP]: Viscosity of the water
+    Number: [s]: T2 time of the water
+    Number: [cm2/s]: Diffusion coefficient of the water
+quantiMinWorkflowAddConstraint(*args, **kwargs)
+quantiMinWorkflowAddConstraint(id: int, dataset: str, zone: str, uncertainty: float, weight: float, parameters: dict) -> bool
+ 
+Add a constraint to a Quanti.Elan workflow
+ 
+Args:
+    id (int): Quanti.Elan existing widget id
+    dataset (str): Well_Dataset name
+    zone (str): Zone Name
+    uncertainty (float): Uncertainty value
+    weight (float): Weight value
+    parameters (dict): Dictionary containing constraint parameters
+ 
+Returns:
+    bool: exit status (True if succed, False if error)
+quantiMinWorkflowAddDataset(*args, **kwargs)
+quantiMinWorkflowAddDataset(id: int, well: str, dataset: str) -> bool
+ 
+Create Quanti.Elan Workflow method
+ 
+Args:
+    id (int): Quanti.Elan existing widget id
+    well (str): Well name
+    dataset (str): Dataset Name
+ 
+Returns:
+    bool: exit status (True if created, False if already exists, or error)
+quantiMinWorkflowSetDeepResistivity(*args, **kwargs)
+quantiMinWorkflowSetDeepResistivity(id: int, dataset: str, zone: str, method: str, a: float, m: float, n: float, c: float, Formation_Water_Resistivity: float, Res_UIWA: float, Mud_Filtrate_Resistivity: float, Res_XIWA: float) -> bool
+ 
+Set deep resistivity parameters to a Quanti.Elan Workflow method
+ 
+Args:
+    id (int): Quanti.Elan existing widget id
+    dataset (str): Well_Dataset name
+    zone (str): Zone Name
+    method (str): Method Name
+    a (float):  a
+    m (float):  m
+    n (float):  n
+    c (float):  c
+    Formation_Water_Resistivity (float): Formation Water Resistivity
+    Res_UIWA (float): Res UIWA
+    Mud_Filtrate_Resistivity (float): Mud Filtrate Resistivity
+    Res_XIWA (float): Res XIWA
+ 
+Returns:
+    bool: exit status (True if succed, False if error)
+quantiMinWorkflowSetInputProperties(*args, **kwargs)
+quantiMinWorkflowSetInputProperties(id: int, dataset: str, zone: str, family: str, equation: str, constant: str) -> bool
+ 
+Set Quanti.Elan Workflow method input properties
+ 
+Args:
+    id (int): Quanti.Elan existing widget id
+    dataset (str): Well_Dataset name
+    zone (str): Zone Name
+    family (str): Family Name
+    equation (str): Equation type
+    constant (str): Constant Name
+ 
+Returns:
+    bool: exit status (True if succed, False if error)
+quantiMinWorkflowSetMineralList(*args, **kwargs)
+quantiMinWorkflowSetMineralList(id: int, dataset: str, zone: str, mineralList: List[str]) -> bool
+ 
+Set the activated Minerals for a Quanti.Elan Workflow method
+ 
+Args:
+    id (int): Quanti.Elan existing widget id
+    dataset (str): Well_Dataset name
+    zone (str): Zone Name
+    mineralList (List[str]): Activated Minerals Names
+ 
+Returns:
+    bool: exit status (True if succed, False if error)
+quantiMinWorkflowSetParameter(*args, **kwargs)
+quantiMinWorkflowSetParameter(id: int, dataset: str, zone: str, mineral: str, variable: str, value: float) -> bool
+ 
+Set a parameter for a Quanti.Elan Workflow method
+ 
+Args:
+    id (int): Quanti.Elan existing widget id
+    dataset (str): Well_Dataset name
+    zone (str): Zone Name
+    mineral (str): Mineral Name
+    variable (str): Column Name
+    value (float): Parameter value
+ 
+Returns:
+    bool: exit status (True if succed, False if error)
+quantiMinWorkflowSetShallowResistivity(*args, **kwargs)
+quantiMinWorkflowSetShallowResistivity(id: int, dataset: str, zone: str, method: str, a: float, m: float, n: float, c: float, Formation_Water_Resistivity: float, Res_UIWA: float, Mud_Filtrate_Resistivity: float, Res_XIWA: float) -> bool
+ 
+Set shallow resistivity parameters to a Quanti.Elan Workflow method
+ 
+Args:
+    id (int): Quanti.Elan existing widget id
+    dataset (str): Well_Dataset name
+    zone (str): Zone Name
+    method (str): Method Name
+    a (float):  a
+    m (float):  m
+    n (float):  n
+    c (float):  c
+    Formation_Water_Resistivity (float): Formation Water Resistivity
+    Res_UIWA (float): Res UIWA
+    Mud_Filtrate_Resistivity (float): Mud Filtrate Resistivity
+    Res_XIWA (float): Res XIWA
+ 
+Returns:
+    bool: exit status (True if succed, False if error)
+quantiMinWorkflowSetToolType(*args, **kwargs)
+quantiMinWorkflowSetToolType(id: int, dataset: str, zone: str, toolType: str) -> bool
+ 
+Set a tool type a Quanti.Elan Workflow method
+ 
+Args:
+    id (int): Quanti.Elan existing widget id
+    dataset (str): Well_Dataset name
+    zone (str): Zone Name
+    toolType (str): Tool type Name
+ 
+Returns:
+    bool: exit status (True if succed, False if error)
+qvFromCEC(*args, **kwargs)
+qvFromCEC(cec: Number, por: Number, rhoGrain: Number) -> Number
+ 
+Compute the Qv
+ 
+Args:
+    cec (Number): [1/kg] Cation Exchange Capability
+    por (Number): [v/v] Porosity
+    rhoGrain (Number): [g/cm3] Grain Density
+ 
+Returns:
+    Number: [1/L]: computed Volumetric CEC
+qvn(*args, **kwargs)
+qvn(por: Number, porShale: Number, vsh: Number) -> Number
+ 
+Compute the normalised Cation Excnhange Capacity (QVn)
+ 
+Args:
+    por (Number): [v/v] Porosity
+    porShale (Number): [v/v] Porosity shale
+    vsh (Number): [v/v] Shale Volume
+ 
+Returns:
+    Number: [v/v]: Normalized CEC
+rwFromFTemp_IonConc(*args, **kwargs)
+rwFromFTemp_IonConc(fTemp: Number, sodiumConc: Number, potaConc: Number, calciumConc: Number, chloriteConc: Number, totalIonConc: Number) -> Number
+ 
+Compute the water resistivity from formation temperature and ion concentration
+ 
+Args:
+    fTemp (Number): [degF] Formation Temperature
+    sodiumConc (Number): [ppk] Sodium concentration
+    potaConc (Number): [ppk] Potassium concentration
+    calciumConc (Number): [ppk] Calcium concentration
+    chloriteConc (Number): [ppk] Chlorite concentration
+    totalIonConc (Number): [ppk] total ion concentration
+ 
+Returns:
+    Number: [ohm.m]: Water Resistivity
+rwFromFTemp_SP(*args, **kwargs)
+rwFromFTemp_SP(fTemp: Number, sp: Number, rmf: Number, mfTemp: Number)
+ 
+Compute the water resistivity and salinity from spoteneous potential and temperature
+ 
+Args:
+    fTemp (Number): [degF] Formation Temperature
+    sp (Number): [mV] Spoteneous Potential
+    rmf (Number): [ohm.m] Mud Filtrate Resistivity
+    mfTemp (Number): [degF] Mud Filtrate Temperature
+ 
+Returns:
+    dict: output dictionary with the following keys:
+    Number: [ohm.m]: Water Resistivity
+    Number: [ppk]: Formation Salinity
+rwFromFTemp_Salinity(*args, **kwargs)
+rwFromFTemp_Salinity(fTemp: Number, salinity: Number) -> Number
+ 
+Compute the water resistivity from formation temperature and salinity
+ 
+Args:
+    fTemp (Number): [degF] Formation Temperature
+    salinity (Number): [ppk] Formation Salinity
+ 
+Returns:
+    Number: [ohm.m]: Water Resistivity
+salinityFromFTemp(*args, **kwargs)
+salinityFromFTemp(fTemp: Number) -> Number
+ 
+Compute the formation salinity
+ 
+Args:
+    fTemp (Number): [degF] Formation Temperature
+ 
+Returns:
+    Number: [ppk]: Formation Salinity
+salinityFromFTemp_Rw(*args, **kwargs)
+salinityFromFTemp_Rw(fTemp: Number, rw: Number) -> Number
+ 
+Compute the formation salinity from formation temperature and water resistivity
+ 
+Args:
+    fTemp (Number): [degF] Formation Temperature
+    rw (Number): [ohm.m] Water Resistivity
+ 
+Returns:
+    Number: [ppk]: Formation Salinity
+shPNC(*args, **kwargs)
+shPNC(vsh: Number, por: Number, zg: Number, zgMatrx: Number, zgHC: Number, zgWater: Number, zgShale: Number)
+ 
+Compute for hydrocarbon saturation using the bulk volume weighted average of components equation for capture cross-sections from PNC logs
+ 
+Args:
+    vsh (Number): [v/v] Bulk Volume Fraction of Shale in the formation
+    por (Number): [v/v] Porosity
+    zg (Number): [cu] PNC log reading
+    zgMatrx (Number): [cu] Capture Cross-section for matrix
+    zgHC (Number): [cu] Capture Cross-section for hydrocarbon
+    zgWater (Number): [cu] Capture Cross-section for formation water
+    zgShale (Number): [cu] Capture Cross-section of reference shale
+ 
+Returns:
+    dict: output dictionary with the following keys:
+    Number: [v/v]: Hydrocarbon Saturation
+    Number: [cu]: Oil line (Sw=0%)
+    Number: [cu]: Water line (Sw=100%)
+shRelPNC(*args, **kwargs)
+shRelPNC(zg1: Number, zg2: Number, zgHC: Number, zgWater: Number, por: Number) -> Number
+ 
+Compute the increase in water saturation seen during a time-lapse waterflood using a PNC log as the monitor log
+ 
+Args:
+    zg1 (Number): [cu] PNC Sigma
+    zg2 (Number): [cu] PNC Sigma of the Base PNC log
+    zgHC (Number): [cu] Sigma of the formation hydrocarbons
+    zgWater (Number): [cu] Sigma of the formation water
+    por (Number): [v/v] Porosity
+ 
+Returns:
+    Number: [v/v]: Increase in water saturation
+swArchie(*args, **kwargs)
+swArchie(res: Number, a: Number, m: Number, n: Number, rw: Number, por: Number) -> Number
+ 
+Compute the water saturation unclipped computed using the Archie equation
+ 
+Args:
+    res (Number): [ohm.m] Resistivity
+    a (Number): [unitless] Tortuosity Factor
+    m (Number): [unitless] Cementation Exponent
+    n (Number): [unitless] Saturation Exponent
+    rw (Number): [ohm.m] Water Resistivity
+    por (Number): [v/v] Porosity
+ 
+Returns:
+    Number: [v/v]: the water saturation unclipped computed
+sweDispersedShale(*args, **kwargs)
+sweDispersedShale(resShale: Number, pore: Number, rt: Number, vsh: Number, a: Number, m: Number, n: Number, rw: Number) -> Number
+ 
+Compute the effective water saturation unclipped computed using the "Dispersed shale" equation
+ 
+Args:
+    resShale (Number): [ohm.m] Resistivity shale
+    pore (Number): [v/v] Effective Porosity
+    rt (Number): [ohm.m] Formation Resistivity
+    vsh (Number): [v/v] Shale Volume
+    a (Number): [unitless] Tortuosity Factor
+    m (Number): [unitless] Cementation Exponent
+    n (Number): [unitless] Saturation Exponent
+    rw (Number): [ohm.m] Water Resistivity
+ 
+Returns:
+    Number: [v/v]: the effective water saturation unclipped computed
+sweEquivalent(*args, **kwargs)
+sweEquivalent(pore: Number, por: Number, sw: Number) -> Number
+ 
+Compute the effective water saturation unclipped computed from water saturation
+ 
+Args:
+    pore (Number): [v/v] Effective Porosity
+    por (Number): [v/v] Porosity
+    sw (Number): [v/v] Water Saturation
+ 
+Returns:
+    Number: [v/v]: the effective water saturation unclipped computed
+sweIndonesia(*args, **kwargs)
+sweIndonesia(resShale: Number, por: Number, rt: Number, vsh: Number, a: Number, m: Number, n: Number, rw: Number) -> Number
+ 
+Compute the effective water saturation unclipped computed using the Indonesia equation
+ 
+Args:
+    resShale (Number): [ohm.m] Resistivity shale
+    por (Number): [ohm.m] Porosity
+    rt (Number): [ohm.m] Formation Resistivity
+    vsh (Number): [v/v] Shale Volume
+    a (Number): [unitless] Tortuosity Factor
+    m (Number): [unitless] Cementation Exponent
+    n (Number): [unitless] Saturation Exponent
+    rw (Number): [ohm.m] Water Resistivity
+ 
+Returns:
+    Number: [v/v]: the effective water saturation unclipped computed
+sweModifiedSimandoux(*args, **kwargs)
+sweModifiedSimandoux(rt: Number, rw: Number, pore: Number, vsh: Number, a: Number, m: Number, resShale: Number) -> Number
+ 
+Compute the effective water saturation unclipped computed using the modified Simandoux equation
+ 
+Args:
+    rt (Number): [ohm.m] Formation Resistivity
+    rw (Number): [ohm.m] Water Resistivity
+    pore (Number): [v/v] Effective Porosity
+    vsh (Number): [v/v] Shale Volume
+    a (Number): [unitless] Tortuosity Factor
+    m (Number): [unitless] Cementation Exponent
+    resShale (Number): [ohm.m] Resistivity shale
+ 
+Returns:
+    Number: [v/v]: the effective water saturation unclipped computed
+sweModifiedSimandouxVarN(*args, **kwargs)
+sweModifiedSimandouxVarN(rt: Number, rw: Number, pore: Number, vsh: Number, resShale: Number, a: Number, m: Number, n: Number) -> Number
+ 
+Compute the effective water saturation unclipped computed using the modified Simandoux equation
+ 
+Args:
+    rt (Number): [ohm.m] Formation Resistivity
+    rw (Number): [ohm.m] Water Resistivity
+    pore (Number): [v/v] Effective Porosity
+    vsh (Number): [v/v] Shale Volume
+    resShale (Number): [ohm.m] Resistivity shale
+    a (Number): [unitless] Tortuosity Factor
+    m (Number): [unitless] Cementation Exponent
+    n (Number): [unitless] Saturation Exponent
+ 
+Returns:
+    Number: [v/v]: the effective water saturation unclipped computed
+sweModifiedTotalShale(*args, **kwargs)
+sweModifiedTotalShale(resShale: Number, pore: Number, rt: Number, vsh: Number, a: Number, m: Number, n: Number, rw: Number) -> Number
+ 
+Compute the effective water saturation unclipped computed using the "Modified total shale" equation
+ 
+Args:
+    resShale (Number): [ohm.m] Resistivity shale
+    pore (Number): [v/v] Effective Porosity
+    rt (Number): [ohm.m] Formation Resistivity
+    vsh (Number): [v/v] Shale Volume
+    a (Number): [unitless] Tortuosity Factor
+    m (Number): [unitless] Cementation Exponent
+    n (Number): [unitless] Saturation Exponent
+    rw (Number): [ohm.m] water resistivity
+ 
+Returns:
+    Number: [v/v]: the effective water saturation unclipped computed
+sweSimandoux(*args, **kwargs)
+sweSimandoux(rt: Number, rw: Number, pore: Number, vsh: Number, resShale: Number, a: Number, m: Number, n: Number) -> Number
+ 
+Compute the effective water saturation unclipped computed using the Simandoux equation
+ 
+Args:
+    rt (Number): [ohm.m] Formation Resistivity
+    rw (Number): [ohm.m] Water Resistivity
+    pore (Number): [v/v] Effective Porosity
+    vsh (Number): [v/v] Shale Volume
+    resShale (Number): [ohm.m] Resistivity shale
+    a (Number): [unitless] Tortuosity Factor
+    m (Number): [unitless] Cementation Exponent
+    n (Number): [unitless] Saturation Exponent
+ 
+Returns:
+    Number: [v/v]: the effective water saturation unclipped computed
+sweTotalShale(*args, **kwargs)
+sweTotalShale(resShale: Number, pore: Number, rt: Number, vsh: Number, a: Number, m: Number, n: Number, rw: Number) -> Number
+ 
+Compute the effective water saturation unclipped computed using the "Total shale" equation
+ 
+Args:
+    resShale (Number): [ohm.m] Resistivity shale
+    pore (Number): [v/v] Effective Porosity
+    rt (Number): [ohm.m] Formation Resistivity
+    vsh (Number): [v/v] Shale Volume
+    a (Number): [unitless] Tortuosity Factor
+    m (Number): [unitless] Cementation Exponent
+    n (Number): [unitless] Saturation Exponent
+    rw (Number): [ohm.m] Water Resistivity
+ 
+Returns:
+    Number: [v/v]: the effective water saturation unclipped computed
+swtDualWater(*args, **kwargs)
+swtDualWater(rt: Number, rw: Number, por: Number, vsh: Number, a: Number, m: Number, n: Number, porShale: Number, resShale: Number) -> Number
+ 
+Compute the water saturation unclipped computed using the dual water equation
+ 
+Args:
+    rt (Number): [ohm.m] Formation Resistivity
+    rw (Number): [ohm.m] Water Resistivity
+    por (Number): [v/v] Porosity
+    vsh (Number): [v/v] Shale Volume
+    a (Number): [unitless] Tortuosity Factor
+    m (Number): [unitless] Cementation Exponent
+    n (Number): [unitless] Saturation Exponent
+    porShale (Number): [v/v] Porosity shale
+    resShale (Number): [ohm.m] Resistivity shale
+ 
+Returns:
+    Number: [v/v]: the water saturation unclipped computed
+swtEquivalent(*args, **kwargs)
+swtEquivalent(pore: Number, por: Number, swe: Number) -> Number
+ 
+Compute the water saturation unclipped computed from effective water saturation
+ 
+Args:
+    pore (Number): [v/v] Effective Porosity
+    por (Number): [v/v] Porosity
+    swe (Number): [v/v] Effective Water Saturation
+ 
+Returns:
+    Number: [v/v]: the water saturation unclipped computed
+swtJuhasz(*args, **kwargs)
+swtJuhasz(rt: Number, rw: Number, por: Number, vsh: Number, porShale: Number, rShale: Number, m: Number, n: Number) -> Number
+ 
+Compute the water saturation unclipped computed using the Juhasz equation
+ 
+Args:
+    rt (Number): [ohm.m] Formation Resistivity
+    rw (Number): [ohm.m] Water Resistivity
+    por (Number): [v/v] Porosity
+    vsh (Number): [v/v] Shale Volume
+    porShale (Number): [v/v] Porosity shale
+    rShale (Number): [ohm.m] Resistivity shale
+    m (Number): [unitless] Cementation Exponent
+    n (Number): [unitless] Saturation Cxponent
+ 
+Returns:
+    Number: [v/v]: the water saturation unclipped computed
+swtWaxmanSmits(*args, **kwargs)
+swtWaxmanSmits(m: Number, n: Number, rt: Number, rw: Number, por: Number, qv: Number, b: Number) -> Number
+ 
+Compute the water saturation unclipped computed using the Waxman-Smits equation
+ 
+Args:
+    m (Number): Cementation Exponent
+    n (Number): Saturation Exponent
+    rt (Number): [ohm.m] Formation Resistivity
+    rw (Number): [ohm.m] Water Resistivity
+    por (Number): [v/v] Porosity
+    qv (Number): [1/L] Volumetric CEC
+    b (Number): [L.S/m] Waxman B
+ 
+Returns:
+    Number: [v/v]: the water saturation unclipped
+uFromSalinity(*args, **kwargs)
+uFromSalinity(salinity: Number) -> Number
+ 
+Compute the U from salinity
+ 
+Args:
+    salinity (Number): [ppk] Salinity
+ 
+Returns:
+    Number: [b/elec]: U
+vshDispersed(*args, **kwargs)
+vshDispersed(porMax: Number, por: Number, porShale: Number, vsh: Number, isPore: bool=False) -> Number
+ 
+Compute the computed clipped dispersed shale volume
+ 
+Args:
+    porMax (Number): [v/v] Porosity maximum
+    por (Number): [v/v] Porosity
+    porShale (Number): [v/v] Porosity shale
+    vsh (Number): [v/v] Shale Volume
+    isPore (bool): Optional; is Effective Porosity {True or False}
+ 
+Returns:
+    Number: [v/v]: the computed clipped dispersed shale volume
+vshGammaRay(*args, **kwargs)
+vshGammaRay(gr: Number, grMatrix: Number, grShale: Number, equation: str='Linear') -> Number
+ 
+Compute the computed unclipped shale volume using gamma ray
+ 
+Args:
+    gr (Number): [gAPI] Gamma Ray
+    grMatrix (Number): [gAPI] Gamma Ray matrix
+    grShale (Number): [gAPI] Gamma Ray shale
+    equation (str): Optional; Equation {"Linear", "Clavier", "Larionov - Tertiary rocks", "Larionov - older rocks"
+ 
+Returns:
+    Number: [v/v]: computed unclipped shale volume
+vshLaminated(*args, **kwargs)
+vshLaminated(porMax: Number, por: Number, porShale: Number, vsh: Number, pore: bool=False) -> Number
+ 
+Compute the computed clipped laminated shale volume
+ 
+Args:
+    porMax (Number): [v/v] Porosity maximum
+    por (Number): [v/v] Porosity
+    porShale (Number): [v/v] Porosity shale
+    vsh (Number): [v/v] Shale Volume
+    pore (bool): Optional; is Effective Porosity {True or False}
+ 
+Returns:
+    Number: [v/v]: the computed clipped laminated shale volume
+vshMN(*args, **kwargs)
+vshMN(neu: Number, dt: Number, den: Number, dtShale: Number, dtFluid: Number, denFluid: Number, denShale: Number, neuShale: Number) -> Number
+ 
+Compute the computed unclipped shale volume using M and N parameters
+ 
+Args:
+    neu (Number): [v/v] Neutron Porosity
+    dt (Number): [us/ft] Compressional Slowness
+    den (Number): [g/cm3] Bulk Density
+    dtShale (Number): [us/ft] Compressional Slowness shale
+    dtFluid (Number): [us/ft] Compressional Slowness fluid
+    denFluid (Number): [g/cm3] Bulk Density fluid
+    denShale (Number): [g/cm3] Bulk Density shale
+    neuShale (Number): [v/v] Neutron Porosity shale
+ 
+Returns:
+    Number: [v/v]: computed unclipped shale volume
+vshNeutronDensity(*args, **kwargs)
+vshNeutronDensity(neu: Number, den: Number, denMatrix: Number, denShale: Number, denFluid: Number, neuMatrix: Number, neuShale: Number, neuFluid: Number) -> Number
+ 
+Compute the computed unclipped shale volume [v/v] using neutron porosity and bulk density
+ 
+Args:
+    neu (Number): [v/v] Neutron Porosity
+    den (Number): [g/cm3] Bulk Density
+    denMatrix (Number): [g/cm3] Bulk Density matrix
+    denShale (Number): [g/cm3] Bulk Density shale
+    denFluid (Number): [g/cm3] Bulk Density fluid
+    neuMatrix (Number): [v/v] Neutron Porosity matrix
+    neuShale (Number): [v/v] Neutron Porosity shale
+    neuFluid (Number): [v/v] Neutron Porosity fluid
+ 
+Returns:
+    Number: [v/v]: computed unclipped shale volume
+vshNeutronSonic(*args, **kwargs)
+vshNeutronSonic(neu: Number, dt: Number, dtMatrix: Number, dtShale: Number, dtFluid: Number, neuMatrix: Number, neuShale: Number, neuFluid: Number) -> Number
+ 
+Compute the computed unclipped shale volume using neutron porosity and compressional slowness
+ 
+Args:
+    neu (Number): [v/v] Neutron Porosity
+    dt (Number): [us/ft] Compressional Slowness
+    dtMatrix (Number): [us/ft] Compressional Slowness matrix
+    dtShale (Number): [us/ft] Compressional Slowness shale
+    dtFluid (Number): [us/ft] Compressional Slowness fluid
+    neuMatrix (Number): [v/v] Neutron Porosity matrix
+    neuShale (Number): [v/v] Neutron Porosity shale
+    neuFluid (Number): [v/v] Neutron Porosity fluid
+ 
+Returns:
+    Number: [v/v]: computed unclipped shale volume
+vshPotassium(*args, **kwargs)
+vshPotassium(pota: Number, potaMatrix: Number, potaShale: Number, equation: str='Linear') -> Number
+ 
+Compute the computed unclipped shale volume using potassium
+ 
+Args:
+    pota (Number): [%] Potassium
+    potaMatrix (Number): [%] Potassium matrix
+    potaShale (Number): [%] Potassium shale
+    equation (str): Optional; Equation {"Linear", "Larionov - Tertiary rocks", "Larionov - older rocks"}
+ 
+Returns:
+    Number: [v/v]: computed unclipped shale volume
+vshResistivity(*args, **kwargs)
+vshResistivity(res: Number, resLim: Number, resShale: Number, equation: str, bExponentGaymar: Number=1) -> Number
+ 
+Compute the computed unclipped shale volume [v/v] using resistivity
+ 
+Args:
+    res (Number): [ohm.m] Resistivity
+    resLim (Number): [ohm.m] Resistivity limstone
+    resShale (Number): [ohm.m] Resistivity shale
+    equation (str): Equation  = {"Resistivity log", "Gaymar"}
+    bExponentGaymar (Number): Optional; B variable exponent for Gaymar}
+ 
+Returns:
+    Number: [v/v]: computed unclipped shale volume [v/v]
+vshSonicDensity(*args, **kwargs)
+vshSonicDensity(dt: Number, den: Number, denMatrix: Number, denShale: Number, denFluid: Number, dtMatrix: Number, dtshale: Number, dtFluid: Number) -> Number
+ 
+Compute the computed unclipped shale volume using compressional slowness and bulk density
+ 
+Args:
+    dt (Number): [us/ft] Compressional Slowness
+    den (Number): [g/cm3] Bulk Density
+    denMatrix (Number): [g/cm3] Bulk Density matrix
+    denShale (Number): [g/cm3] Bulk Density shale
+    denFluid (Number): [g/cm3] Bulk Density fluid
+    dtMatrix (Number): [us/ft] Compressional Slowness matrix
+    dtshale (Number): [us/ft] Compressional Slowness shale
+    dtFluid (Number): [us/ft] Compressional Slowness fluid
+ 
+Returns:
+    Number: [v/v]: computed unclipped shale volume
+vshStructured(*args, **kwargs)
+vshStructured(porMax: Number, por: Number, porShale: Number, vsh: Number, isPore: bool=False) -> Number
+ 
+Compute the computed clipped structured shale volume
+ 
+Args:
+    porMax (Number): [v/v] Porosity maximum
+    por (Number): [v/v] Porosity
+    porShale (Number): [v/v] Porosity shale
+    vsh (Number): [v/v] Shale Bolume
+    isPore (bool): Optional; is effective porosity {True or False}
+ 
+Returns:
+    Number: [v/v]: the computed clipped structured shale volume
+vshThorium(*args, **kwargs)
+vshThorium(thor: Number, thorMatrix: Number, thorShale: Number, equation: str='Linear') -> Number
+ 
+Compute the computed unclipped shale volume using thorium
+ 
+Args:
+    thor (Number): [%] Thorium
+    thorMatrix (Number): [%] Thorium matrix
+    thorShale (Number): [%] Thorium shale
+    equation (str): Optional; Equation {"Linear", "Larionov - Tertiary rocks", "Larionov - older rocks"}
+ 
+Returns:
+    Number: [v/v]: computed unclipped shale volume
