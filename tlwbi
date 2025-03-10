@@ -1,0 +1,835 @@
+
+ 
+TechlogWBI	index
+c:\program files\techlog 2024.2 (r9274463)\pythonscripts\techlogwbi.py
+# Copyright (c) 2023 SLB
+# SLB Confidential
+
+
+ 
+Modules
+      	 	
+remote_techlog
+
+ 
+Functions
+      	 	
+AutoDip_MSD(*args, **kwargs)
+AutoDip_MSD(toolName: str, well: str, dataset: str, padAAzimuthList: list, relativeBearingList: list, caliperList: list, padsList: list, hazi: str, mincorr: Number, step: Number, searchangle: Number, enddepth: Number) -> bool
+ 
+MSD autodip
+ 
+Args:
+    toolName (str): name of the tool
+                       (currently supported: FMI_8, FMI_SLIM_4, FMS_4, OBMI, STAR, STAR_WIDE, EARTH_IMAGER, GEOXPLORER, XRMI, EMI, OMRI, CMI_8, HMI, 6_ARMS_DIPMETER, 4_ARMS_DIPMETER, SHDT)
+    well (str): name of the well
+    dataset (str): name of the dataset
+    padAAzimuthList (list): list of name of the pad A azimuth variable(s)
+    relativeBearingList (list): list of name of the relative bearing variable(s)
+    caliperList (list): list of name of the caliper variable(s)
+    padsList (list): list of name of the pads variable(s)
+    hazi (str): 
+    devi (str): 
+    mincorr (Number): 
+    windowsize (Number): 
+    step (Number): 
+    decimation (Number): 
+    searchangle (Number): 
+    startdepth (Number): 
+    enddepth (Number): 
+    varOutName (Number): name to be given to the output variable
+ 
+Returns:
+    bool: True or False
+apparentDipComputation(*args, **kwargs)
+apparentDipComputation(trueDip: Number, trueAzimuth: Number, holeDeviation: Number, holeAzimuth: Number, orientation: str='TopOfTheHole')
+ 
+Apparent Dip Computation
+ 
+Args:
+    trueDip (Number): [rad] true dip
+    trueAzimuth (Number): [rad] true azimuth
+    holeDeviation (Number): [rad] hole deviation
+    holeAzimuth (Number): [rad] hole azimuth
+    orientation (str): Optional; orientation 'TopOfTheHole' or 'North'
+Outputs:
+    Number: apparent dip
+    Number: apparent azimuth
+arrayFlattening(*args, **kwargs)
+arrayFlattening(well: str, arrayDataset: str, arrayName: str, dipDataset: str, dipName: str, aimuthName: str, suffix: str=None) -> bool
+ 
+Array flattening
+ 
+Args:
+    well (str): name of the well
+    arrayDataset (str): name of the dataset containing the array
+    arrayName (str): name of the array variable
+    dipDataset (str): name of the dataset containing the dips
+    dipName (str): name of the dip variable to use
+    aimuthName (str): name of the azimuth variable to use
+    suffix (str): Optional; suffix
+ 
+Returns:
+    bool: operation exit status
+autoDip(*args, **kwargs)
+autoDip(well: str, arrayDataset: str, arrayName: str, caliperName: str, dipDataset: str, verticalRange: float=5, qualCutoff: float=0.7, valueTol: float=10, highdip: bool, azimuth_resolution: bool) -> bool
+ 
+auto dip detection
+ 
+Args:
+    well (str): name of the well
+    arrayDataset (str): name of the dataset containing the array
+    arrayName (str): name of the array variable
+    caliperName (str): name of the caliper variable
+    dipDataset (str): desired name for the dataset containing the detected dips
+    verticalRange (float): Optional; vertical range
+    qualCutoff (float): Optional; quality cutoff between [0.0, 1.0]
+    valueTol (float): Optional; value tolerance
+    highdip (bool): [false] use high dip method
+    azimuth_resolution (bool): [true] equalize as a preprocess
+ 
+Returns:
+    bool: operation exit status
+autoDipConstrained(*args, **kwargs)
+autoDipConstrained(well: str, arrayDataset: str, arrayName: str, caliperName: str, constraintDataset: str, dipDataset: str) -> bool
+ 
+auto dip detection in constrained mode, optional kwd args : qualCutoff, azimuth_resolution, dip_resolution, max_angle, angular_tolerance, valueTol (example: qualCutoff=0.2) 
+ 
+Args:
+    well (str): name of the well
+    arrayDataset (str): name of the dataset containing the array
+    arrayName (str): name of the array variable
+    caliperName (str): name of the caliper variable
+    constraintDataset (str): dataset containing the constraints, (must have apparent dips in it)
+    dipDataset (str): desired name for the output dataset containing the detected dips
+ 
+Returns:
+    bool: operation exit status
+autoShiftArray(*args, **kwargs)
+autoShiftArray(well: str, dataset: str, array1: str, array2: str, name: str, winsize: Number, maxshift: Number, smoothsize: Number, mincor: Number) -> bool
+ 
+Auto shift array
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset
+    array1 (str): name of the variable1
+    array2 (str): name of the variable2
+    name (str): name of the suffix
+    winsize (Number): size of the window
+    maxshift (Number): max shift
+    smoothsize (Number): smooth size
+    mincor (Number): mincor
+ 
+Returns:
+    bool: operation exit status
+autoShiftArrayList(*args, **kwargs)
+autoShiftArrayList(well: str, dataset: str, array1list: List[str], array2list: List[str], winsize: Number, maxshift: Number, smoothsize: Number, mincor: Number, suffix: str='') -> bool
+ 
+Image Based Speed Correction
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset
+    array1list (List[str]): namelist of the pad variable
+    array2list (List[str]): namelist of the flaps variable
+    winsize (Number): correlation windows size in pixels
+    maxshift (Number): maximum allowed shift
+    smoothsize (Number): smoothing window size ( if < 3 no smooth )
+    mincor (Number): min acceptable correlation
+    suffix (str): Optional; suffix to the output parameter name
+ 
+Returns:
+    bool: operation exit status
+autoShiftButtons(*args, **kwargs)
+autoShiftButtons(well: str, dataset: str, varname: str, suffix: str, winsize: int, maxshift: int, mincorr: float, majvote: bool, fitapriori: bool) -> bool
+ 
+Auto shift button
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset
+    varname (str): name of the variable1
+    suffix (str): name of the suffix
+    winsize (int): size of the window
+    maxshift (int): max shift
+    mincorr (float): mincor
+    majvote (bool): majvote
+    fitapriori (bool): fitapriori
+ 
+Returns:
+    bool: operation exit status
+autoShiftDualObmi(*args, **kwargs)
+autoShiftDualObmi(well: str, dataset: str, array1list: List[str], array2list: List[str], suffix: str, winsize: Number, maxshift: Number, smoothsize: Number, mincor: float, orienttoshift: str, orienttool: str, addvariablelist: str) -> bool
+ 
+Auto shift far array list
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset
+    array1list (List[str]): list of name of the variable1
+    array2list (List[str]): list of name of the variable2
+    suffix (str): name of the suffix
+    winsize (Number): size of the window
+    maxshift (Number): max shift
+    smoothsize (Number): smooth size
+    mincor (float): mincor
+    orienttoshift (str): orientation curve of the tool to shift
+    orienttool (str): orientation curve of the reference
+    addvariablelist (str): additional curves to shift
+ 
+Returns:
+    bool: operation exit status
+autoShiftFarArrayList(*args, **kwargs)
+autoShiftFarArrayList(well: str, dataset: str, array1list: List[str], array2list: List[str], suffix: str, winsize: Number, maxshift: Number, smoothsize: Number, mincor: Number) -> bool
+ 
+Auto shift far array list
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset
+    array1list (List[str]): list of name of the variable1
+    array2list (List[str]): list of name of the variable2
+    suffix (str): name of the suffix
+    winsize (Number): size of the window
+    maxshift (Number): max shift
+    smoothsize (Number): smooth size
+    mincor (Number): mincor
+ 
+Returns:
+    bool: operation exit status
+averageFilter2D(*args, **kwargs)
+averageFilter2D(well: str, dataset: str, varname: str, suffix: str, winsize: Number, maxshift: Number, replaceMV: bool=False) -> bool
+ 
+Averaging filter
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset
+    varname (str): name of the array
+    suffix (str): name of the suffix
+    winsize (Number): size x of the mask (in number of sample)
+    maxshift (Number): size y of the mask (in number of sample)
+    replaceMV (bool): Optional; replace missing values
+ 
+Returns:
+    bool: operation exit status
+butonHarmonisation(*args, **kwargs)
+butonHarmonisation(w: str, d: str, al: list, arraybyarray: bool, suffix: str='_H', windowSize: Number=0) -> bool
+ 
+Button harmonisation of list of array
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    al (list): list of arrays
+    arraybyarray (bool): [True] equalise arrays independantly
+    suffix (str): Optional; suffix to the output array name
+    windowSize (Number): Optional; number of samples if 0 not windowed harmonisation
+ 
+Returns:
+    bool: True or False
+clusterDipAzi(*args, **kwargs)
+clusterDipAzi(Dip: list, Azimuth: list, degree: bool) -> list
+ 
+dip clustering
+ 
+Args:
+    Dip (list): dips
+    Azimuth (list): azimuths
+    degree (bool): in degree or rad
+Outputs:
+    list: list of cluster indexes
+computeDipAziStats(*args, **kwargs)
+computeDipAziStats(Dip: list, Azimuth: list, degree: bool)
+ 
+dip, azimuths mean and mean resultant length computation
+ 
+Args:
+    Dip (list): dips
+    Azimuth (list): azimuths
+    degree (bool): in degree or rad
+Outputs:
+    Number: mean dip
+    Number: mean azimuth
+    Number: mean resultant
+computeGpitDepthCorrector(*args, **kwargs)
+computeGpitDepthCorrector(well: str, dataset: str, Zaccelerometer: str, Acquisition, cableFactor: Number, detectionThreshold: Number, recoverySpeedRatio: Number) -> bool
+ 
+Speed correction process
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset
+    Zaccelerometer (str): fcaz
+    Acquisition (None): Time[string]: ftim
+    cableFactor (Number): cableFactor
+    detectionThreshold (Number): [m/s2] detectionThreshold
+    recoverySpeedRatio (Number): recoverySpeedRatio
+ 
+Returns:
+    bool: True or False
+computeHistogramArray(*args, **kwargs)
+computeHistogramArray(w: str, d: str, alist: list, outname: str='HistArray', minIn: Number=0, maxIn: Number=-9999, log: bool=False, winsize: bool=True, useBoxCox: Number=-0.1, bcLambda: Number=1, beg: Number=-1, end: Number=-1, nbbin: Number=-1) -> bool
+ 
+Compute a Histogram array
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    alist (list): list of arrays
+    outname (str): Optional; output name of the array
+    minIn (Number): Optional; minimum input
+    maxIn (Number): Optional; maximum input
+    log (bool): Optional; is logarithmic
+    winsize (bool): Optional; use or not the Box-Cox
+    useBoxCox (Number): Optional; bc Lambda for the Box-Cox
+    bcLambda (Number): Optional; window size (in number of samples)
+    beg (Number): Optional; begin of the interval
+    end (Number): Optional; end of the interval
+    nbbin (Number): Optional; number of bins of the histogram
+ 
+Returns:
+    bool: True or False
+concatenation(*args, **kwargs)
+concatenation(toolName: str, well: str, dataset: str, padAAzimuthList: list, relativeBearingList: list, caliperList: list, padsList: list, flapslist: list, tabsInterlaced: bool, reversedArrays: bool, flapFirst: bool, reverseOddPads: bool, inversePadArraysOrder: bool, inverseFlapArraysOrder: bool, offsetOddPads: Number, offsetOddButtons: Number, reverseImage: bool, bitSize: Number, holeCoverage: Number, resolution: Number, angularMode: bool, orientationMode: int, varOutName: Number, swingArmCorrection: bool=False, angularOffset: int=0) -> bool
+ 
+Concatenate and orientate several pads/flaps arrays into one single image array
+ 
+Args:
+    toolName (str): name of the tool
+                       (currently supported: FMI_16, FMI_8, OBMI, DUALOBMI, FMI_SLIM_8, FMI_SLIM_4, LWD - ROTARY IMAGERS, STAR, STAR_WIDE, EARTH_IMAGER, XRMI, EMI, CBIL, UBI, FMS_4, FMS_8, CMI_16, CMI_8, HMI, OMRI, GEOXPLORER)
+    well (str): name of the well
+    dataset (str): name of the dataset
+    padAAzimuthList (list): list of name of the pad A azimuth variable(s)
+    relativeBearingList (list): list of name of the relative bearing variable(s)
+    caliperList (list): list of name of the caliper variable(s)
+    padsList (list): list of name of the pads variable(s)
+    flapslist (list): list of name of the flaps variable(s)
+    tabsInterlaced (bool): do the arrays composing pads and flaps need to be interlaced
+    reversedArrays (bool): do the arrays need to be reversed before concatenation
+    flapFirst (bool): do the flaps need to be placed before pads
+    reverseOddPads (bool): do the arrays of odd pads need to be reversed (upside-down pads)
+    inversePadArraysOrder (bool): deinterlace traversal order (false means 1-2, true means 2-1)
+    inverseFlapArraysOrder (bool): deinterlace traversal order (false means 1-2, true means 2-1)
+    offsetOddPads (Number): [in] vertical offset of the odd pads
+    offsetOddButtons (Number): [in] vertical offset of the odd buttons
+    reverseImage (bool): do the final image need to be reversed
+    bitSize (Number): [in] size of the drill bit (will be used instead of calipers if greater than 0)
+    holeCoverage (Number): [%] percentage of hole coverage (will be used instead of calipers if greater than 0)
+    resolution (Number): [px] desired horizontal resolution of the output (automatic minimal resolution will be computed if value is less or equal than 0)
+    angularMode (bool): if true, arrays will be concatenated using the angular mode (unconstant width of the pads)
+    orientationMode (int): 0 = North ; 1 = Top of the hole ; 2 = TOH to North ; 3 = North to TOH; 4 = None
+    varOutName (Number): name to be given to the output variable
+    swingArmCorrection (bool): Optional; set to true will perform swing arm correction
+    angularOffset (int): Optional; Constant angular offset for the image
+ 
+Returns:
+    bool: True or False
+cutOff(*args, **kwargs)
+cutOff(w: str, d: str, a: str, suffix: str='_C', minValue: Number=0, maxValue: Number=MissingValue) -> bool
+ 
+Cut-off the array
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    a (str): name of the array
+    suffix (str): Optional; suffix to the output array name
+    minValue (Number): Optional; min value if MissingValue no min limit
+    maxValue (Number): Optional; max value if MissingValue no max limit
+ 
+Returns:
+    bool: True or False
+derivativeFilter2D(*args, **kwargs)
+derivativeFilter2D(well: str, dataset: str, varname: str, suffix: str, winsize: Number, maxshift: Number, replaceMV: bool=False) -> bool
+ 
+gaussian derivative filter
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset
+    varname (str): name of the array
+    suffix (str): name of the suffix
+    winsize (Number): size x of the mask (in number of sample)
+    maxshift (Number): size y of the mask (in number of sample)
+    replaceMV (bool): Optional; replace missing value
+ 
+Returns:
+    bool: operation exit status
+emexCorrection(*args, **kwargs)
+emexCorrection(well: str, dataset: str, arrayName: str, emexName: str, suffix: str) -> bool
+ 
+Emex gain correction
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset containing the array
+    arrayName (str): name of the array variable
+    emexName (str): name of the emex  variable
+    suffix (str): suffix
+ 
+Returns:
+    bool: operation exit status
+faultyButtonsCheck(*args, **kwargs)
+faultyButtonsCheck(w: str, d: str, al: list, windowSize: Number=10, tolerance: Number=1E-5, computeNV: bool=True, removeFaulty: bool=False) -> bool
+ 
+Faulty buttons check and cleanup there is no duplication or backup the operation is made on the array directly
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    al (list): list of arrays
+    windowSize (Number): Optional; number of samples with faulty button value before define as faulty button
+    tolerance (Number): Optional; flatness factor
+    computeNV (bool): Optional; count the negative value
+    removeFaulty (bool): Optional; replace faulty button value by no value
+ 
+Returns:
+    bool: True or False
+filterDips(*args, **kwargs)
+filterDips(w: str, d: str, dip: str, azi: str, quali: str, degree: bool, sequencesize: int, DepthThreshold: Number) -> bool
+ 
+Dips Interpolation function
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    dip (str): dip variable name
+    azi (str): Azimuth variable name
+    quali (str): Quality variable name
+    degree (bool): degree or rad
+    sequencesize (int): 
+    AngularThreshold (Number): 
+    DepthThreshold (Number): 
+ 
+Returns:
+    bool: True or False
+fitGreatCircleAndAxis(*args, **kwargs)
+fitGreatCircleAndAxis(dip_axis: list, azimuth_axis: list, dip_plane: list, azimuth_plane: list) -> tuple
+ 
+Dual Optimisation pb for Structural dip analysis (all angles in degrees)
+ 
+Args:
+    dip_axis (list): axis points dips
+    azimuth_axis (list): axis points azimuths
+    dip_plane (list): plane points dips
+    azimuth_plane (list): plane points azimuths.
+ 
+Returns:
+    tuple: best fit dip and azimuth angles
+fractureAperture(*args, **kwargs)
+fractureAperture(well: str, arrayDataset: str, arrayName: str, dipDataset: str, dipVariable: str, mudResistivity: float, B: float, C: float, output_name: str) -> bool
+ 
+fracture aperture on oriented image
+ 
+Args:
+    well (str): name of the well
+    arrayDataset (str): name of the dataset containing the array
+    arrayName (str): name of the array variable
+    dipDataset (str): name of the dip dataset
+    dipVariable (str): name of the TRUE dip variable
+    mudResistivity (float): mud resistivity as a constant over the well
+    B (float): luthi parameter corresponding to tool model
+    C (float): luthi parameter corresponding to tool model
+    output_name (str): variable name to store aperture
+ 
+Returns:
+    bool: operation exit status
+gaussianSmooth(*args, **kwargs)
+gaussianSmooth(well: str, dataset: str, varname: str, suffix: str, winsize: Number, maxshift: Number, replaceMV: bool) -> bool
+ 
+gaussianSmooth
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset
+    varname (str): name of the array
+    suffix (str): name of the suffix
+    winsize (Number): size x of the window
+    maxshift (Number): size y of the window
+    replaceMV (bool): replace missing value
+ 
+Returns:
+    bool: operation exit status
+getBoreholeCenter(*args, **kwargs)
+getBoreholeCenter(array: list, angle: list)
+ 
+Compute the polar coordinates of the barycenter of the borehole shape
+ 
+Args:
+    array (list): radius of the borehole
+    angle (list): angles (degA)
+ 
+Returns:
+    Number: distance to the center
+    Number: angle to the direction towards the center (degA)
+histogramEqualisation(*args, **kwargs)
+histogramEqualisation(w: str, d: str, alist: list, suffix: str='_HQ', minIn: Number=0, maxIn: Number=-9999, minOut: Number=0, maxOut: Number=255, winsize: Number=1, useBoxCox: bool=True, onbuttons: bool=False, arraybyarray: bool=True, bcLambda: Number=-0.1, beg: Number=-1, end: Number=-1) -> bool
+ 
+Histogram equalisation of array(s)
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    alist (list): list of arrays
+    suffix (str): Optional; suffix to the output parameter name
+    minIn (Number): Optional; minimum input
+    maxIn (Number): Optional; maximum input
+    minOut (Number): Optional; minimum output
+    maxOut (Number): Optional; maximum output
+    winsize (Number): Optional; window size (in reference unit) if -1 not windowed histogram equalisation
+    useBoxCox (bool): Optional; use or not the Box-Cox
+    onbuttons (bool): Optional; equalise button by buttons
+    arraybyarray (bool): Optional; equalise arrays independantly
+    bcLambda (Number): Optional; bc Lambda for the Box-Cox
+    beg (Number): Optional; begin of the interval
+    end (Number): Optional; end of the interval
+ 
+Returns:
+    bool: True or False
+imageFilterWbi(*args, **kwargs)
+imageFilterWbi(w: str, d: str, a: str, s: str) -> bool
+ 
+generic Image filter
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    a (str): name of the array
+    s (str): name of the procesing any of ( 'canny', 'Derivative', 'Derivative Magnitude', 'Contrast Enhance', 'shadows', 'median', 'smooth', 'average')
+Keywords parameters for the processing :
+ size [number] : ( Derivative, Derivative Magnitude, Contrast Enhance, median) size in pixel of the processing kernel
+ xsize, ysize [number] (smooth, average) HORIZONTAL and VERTICAL size of the kernel
+ direction [number] : (Derivative) 0 for vertical and 1 for horizontal derivative
+ angle [number]: (shadows) dega angle direction for shadow filter
+ sensitivity [number]: (canny) sensitivity from 0 to 1 for edge detection
+ 
+Returns:
+    bool: operation exit status
+interpolateDips(*args, **kwargs)
+interpolateDips(w: str, d: str, dip: str, azi: str, degree: bool, tol: Number) -> bool
+ 
+Dips Interpolation function
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    dip (str): dip variable name
+    azi (str): Azimuth variable name
+    degree (bool): is degree
+    tol (Number): tolerance in depth unit
+ 
+Returns:
+    bool: True or False
+mergeArrays(*args, **kwargs)
+mergeArrays(well: str, dataset: str, array1: List[str], array2: List[str], interlaced: bool, reversed: bool, voffset: Number, suffix: str) -> bool
+ 
+mergeArrays
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset
+    array1 (List[str]): list of name of the variable1
+    array2 (List[str]): list of name of the variable2
+    interlaced (bool): interlaced
+    reversed (bool): reverse
+    voffset (Number): vertical offset
+    suffix (str): suffix
+ 
+Returns:
+    bool: operation exit status
+padImageCreation(*args, **kwargs)
+padImageCreation(well: str, dataset: str, padList: list, flapList: list, toolName: str, tabsInterlaced: bool, reverseArrays: bool, reverseOddPads: bool, inversePadArraysOrder: bool, inverseFlapArraysOrder: bool, offsetOddPads: Number, offsetOddButtons: Number, suffix: str=None) -> bool
+ 
+Prepare pad and flap arrays ready for concatenation
+ 
+Args:
+    well (str): name of the well
+    dataset (str): name of the dataset
+    padList (list): list of name of the pads variable(s)
+    flapList (list): list of name of the flaps variable(s)
+    toolName (str): name of the tool
+(currently supported : FMI_16, FMI_8, FMS_8, OBMI, DUALOBMI, FMI_SLIM_8, FMI_SLIM_4, STAR, STAR_WIDE, EARTH_IMAGER, GEOXPLORER, XRMI, EMI, CMI_16, CMI_8, HMI, OMRI)
+    tabsInterlaced (bool): do the arrays composing pads and flaps need to be interlaced
+    reverseArrays (bool): do the arrays need to be reversed before concatenation
+    reverseOddPads (bool): do the arrays of odd pads need to be reversed (upside-down pads)
+    inversePadArraysOrder (bool): deinterlace traversal order (false means 1-2, true means 2-1)
+    inverseFlapArraysOrder (bool): deinterlace traversal order (false means 1-2, true means 2-1)
+    offsetOddPads (Number): [in] vertical offset of the odd pads
+    offsetOddButtons (Number): [in] vertical offset of the odd buttons
+    suffix (str): Optional; suffix to be added to the output variable name
+ 
+Returns:
+    bool: True or False
+parameterExtraction(*args, **kwargs)
+parameterExtraction(w: str, d: str, a: str, suffix: str=' ''') -> bool
+ 
+Paramter extraction (min, max, mean, median, variance) from an array
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    a (str): name of array
+    suffix (str): Optional; suffix to the output parameter name
+ 
+Returns:
+    bool: True or False
+rasterToArray(*args, **kwargs)
+rasterToArray(well: str, rasterDataset: str, rasterName: str, arrayDataset: str, arrayName: str) -> bool
+ 
+convert a raster image to an array
+ 
+Args:
+    well (str): name of the well
+    rasterDataset (str): name of the dataset containing the raster image
+    rasterName (str): name of the raster image
+    arrayDataset (str): name of the output dataset for the array
+    arrayName (str): name of the output array variable
+ 
+Returns:
+    bool: operation exit status
+setAzimuthVariable(*args, **kwargs)
+setAzimuthVariable(wellName: str, datasetName: str, varName: str, azimuthName: str) -> bool
+ 
+associate an azimuth to the given dip
+ 
+Args:
+    wellName (str): name of the well
+    datasetName (str): name of the dataset containing the dip
+    varName (str): name of the dip
+    azimuthName (str): name of the azimuth to associate
+ 
+Returns:
+    bool: operation exit status
+setDipHeightVariable(*args, **kwargs)
+setDipHeightVariable(wellName: str, datasetName: str, varName: str, dipHeightName: str) -> bool
+ 
+associate a dip height to the given dip
+ 
+Args:
+    wellName (str): name of the well
+    datasetName (str): name of the dataset containing the dip
+    varName (str): name of the dip
+    dipHeightName (str): name of the dip height to associate
+ 
+Returns:
+    bool: operation exit status
+setOrientation(*args, **kwargs)
+setOrientation(wellName: str, datasetName: str, varName: str, orientation: str='Undefined') -> bool
+ 
+set orientation of the given dip
+ 
+Args:
+    wellName (str): name of the well
+    datasetName (str): name of the dataset containing the dip
+    varName (str): name of the dip
+    orientation (str): Optional; type of orientation={'Top of the hole', 'North', 'Undefined'}
+ 
+Returns:
+    bool: operation exit status
+setProperties(*args, **kwargs)
+setProperties(wellName: str, datasetName: str, varName: str, azimuthName: str='', typeName: str='', qualityName: str='', orientation: str='', dipHeightName: str='') -> bool
+ 
+associate properties to the given dip
+if property is not filled in, current variable property will be kept
+ 
+Args:
+    wellName (str): name of the well
+    datasetName (str): name of the dataset containing the dip
+    varName (str): name of the dip
+    azimuthName (str): Optional; name of the azimuth to associate
+    typeName (str): Optional; name of the type classification
+    qualityName (str): Optional; name of the quality to associate
+    orientation (str): Optional; type of orientation={'Top of the hole', 'North', 'Undefined'}
+    dipHeightName (str): Optional; name of the dip height to associate
+ 
+Returns:
+    bool: operation exit status
+setQualityVariable(*args, **kwargs)
+setQualityVariable(wellName: str, datasetName: str, varName: str, qualityName: str) -> bool
+ 
+associate a quality to the given dip
+ 
+Args:
+    wellName (str): name of the well
+    datasetName (str): name of the dataset containing the dip
+    varName (str): name of the dip
+    qualityName (str): name of the quality to associate
+ 
+Returns:
+    bool: operation exit status
+setTypeVariable(*args, **kwargs)
+setTypeVariable(wellName: str, datasetName: str, varName: str, typeName: str) -> bool
+ 
+associate a type classification to the given dip
+ 
+Args:
+    wellName (str): name of the well
+    datasetName (str): name of the dataset containing the dip
+    varName (str): name of the dip
+    typeName (str): name of the type classification
+ 
+Returns:
+    bool: operation exit status
+shiftArray(*args, **kwargs)
+shiftArray(w: str, d: str, a: str, depthOriginal: str, depthCorrected: str, suffix: str='_SCD', gap: Number=0) -> bool
+ 
+Apply speed correction to list of arrays
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    a (str): name of the array
+    depthOriginal (str): measured depth variable name before the shift
+    depthCorrected (str): measured depth variable name after the speed correction
+    suffix (str): Optional; suffix to the output array name
+    gap (Number): Optional; [m] gap between the accelorometer and the array to be shifted
+ 
+Returns:
+    bool: True or False
+shiftArrayByConst(*args, **kwargs)
+shiftArrayByConst(w: str, d: str, a: str, suffix: str, gap_in: Number) -> bool
+ 
+Apply speed correction to list of arrays
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    a (str): name of the array
+    suffix (str): extention for the new array name
+    gap_in (Number): [m] constant shift in inches
+ 
+Returns:
+    bool: True or False
+smoothHorizontally(*args, **kwargs)
+smoothHorizontally(w: str, d: str, v: str, wsize: int) -> bool
+ 
+smoothHorizontally
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    v (str): name of the variable
+    wsize (int): 
+    suffix (str): name of the suffix
+ 
+Returns:
+    bool: operation exit status
+smoothVertically(*args, **kwargs)
+smoothVertically(w: str, d: str, v: str, wsize: int) -> bool
+ 
+smoothVertically
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    v (str): name of the variable
+    wsize (int): 
+    suffix (str): name of the suffix
+ 
+Returns:
+    bool: operation exit status
+speedCorrection(*args, **kwargs)
+speedCorrection(w: str, d: str, cs: str, zAcc: str, devi: str, sprate: Number, winsize: Number, suffix: str='_SCD') -> bool
+ 
+Speed correction function
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    cs (str): cable speed variable name
+    zAcc (str): Z acceleration variable name
+    devi (str): deviation variable name
+    sprate (Number): [m] sampling rate
+    winsize (Number): [m] 
+    usemean (bool): compute the mean of the cs and devie
+    suffix (str): Optional; 
+ 
+Returns:
+    bool: True or False
+speedCorrectionBKR(*args, **kwargs)
+speedCorrectionBKR(w: str, d: str, Depth: str, Zacc: str, Dev: str, Etime: str, suffix: str='_S', logDirection: float=1) -> bool
+ 
+Speed correction function
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    Depth (str): Depth curve name
+    Zacc (str): Z acceleration variable name
+    Dev (str): deviation variable name
+    Etime (str): Elapsed time between samples
+    suffix (str): Optional; suffix
+    logDirection (float): Optional; 1: Up or -1 : Down
+ 
+Returns:
+    bool: operation exit status
+speedCorrectionwithtime(*args, **kwargs)
+speedCorrectionwithtime(w: str, d: str, cs: str, zAcc: str, devi: str, sprate: Number, winsize: Number, usemean: bool, suffix: str='_SCDT') -> bool
+ 
+Speed correction function
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    cs (str): time variable name
+    zAcc (str): Z acceleration variable name
+    devi (str): deviation variable name
+    sprate (Number): [m] sampling rate
+    winsize (Number): [m] window size
+    usemean (bool): compute the mean of the cs and devie
+    suffix (str): Optional; 
+ 
+Returns:
+    bool: True or False
+splineBoreholeShape(*args, **kwargs)
+splineBoreholeShape(radius: list, angle: list) -> list
+ 
+Interpolate the array using spline
+ 
+Args:
+    radius (list): radius of the borehole
+    angle (list): angles (degA)
+ 
+Returns:
+    list: the array interpolated
+structuralDipRemoval(*args, **kwargs)
+structuralDipRemoval(trueDip: Number, trueAzimuth: Number, structuralDip: Number, structuralAzimuth: Number) -> Number
+ 
+Structural dip removal (relative dip computation)
+ 
+Args:
+    trueDip (Number): [dega] input dip to apply the removal
+    trueAzimuth (Number): [dega] input azimuth to apply the removal
+    structuralDip (Number): [dega] input structural dip to be removed
+    structuralAzimuth (Number): [dega] input structural azimuth to be removed
+Outputs:
+    Number: dip and azimuth value corrected with structural dip - relativeAzimuth [number][dega]: dip and azimuth value corrected with structural dip
+transformLog10(*args, **kwargs)
+transformLog10(w: str, d: str, v: str, suffix: str) -> bool
+ 
+Transform Log 10
+ 
+Args:
+    w (str): name of the well
+    d (str): name of the dataset
+    v (str): name of the variable
+    suffix (str): name of the suffix
+ 
+Returns:
+    bool: operation exit status
+trueDipComputation(*args, **kwargs)
+trueDipComputation(apparentDip: Number, apparentAzimuth: Number, holeDeviation: Number, holeAzimuth: Number, orientation: str='TopOfTheHole')
+ 
+True dip computation
+ 
+Args:
+    apparentDip (Number): [rad] apparent dip
+    apparentAzimuth (Number): [rad] apparent azimuth
+    holeDeviation (Number): [rad] hole deviation
+    holeAzimuth (Number): [rad] hole azimuth
+    orientation (str): Optional; orientation 'TopOfTheHole' or 'North'
+Outputs:
+    Number: true dip
+    Number: true azimuth
