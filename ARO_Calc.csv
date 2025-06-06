@@ -1,0 +1,28 @@
+2661707 Alberta ltd,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9
+PROJECTED PROFORMA ASSET RETIRMENT OBLIGATION,,,,,,,,,
+Unaudited,,,,,,,,,
+,,,,,,,,,
+,Description,Deemed Assets,Deemed Liability,Number of Wells,Average Life in Years,Estimated Abandonment Cost per Well (after inflation),Estimated Total Abandonment Cost per Well (after inflation),Present Value Factor,Present Value
+,Wells,0,14232432,183,15,55000,10065000,0.516720442315768,5200791.2519082045
+,Facilities,,3519820,28,15,75000,2100000,0.516720442315768,1085112.9288631128
+,Wells,,4500000,45,3,100000,4500000,0.8762966040549093,3943334.718247092
+,"Balance, January 1, 2025",,22252252,,,,,,10229238.899018409
+,Accretion,,,,,,,,81833.91119214726
+,"Balance, December 31, 2025",,,,,,,,10311072.810210556
+,Accretion,,,,,,,,82488.58248168445
+,"Balance, December 31, 2026",,,,,,,,10393561.39269224
+,Accretion,,,,,,,,83148.49114153792
+,"Balance, December 31, 2027",,,,,,,,10476709.883833777
+,Accretion,,,,,,,,83813.67907067022
+,"Balance, December 31, 2028",,,,,,,,10560523.562904447
+,Accretion,,,,,,,,84484.18850323558
+,"Balance, December 31, 2029",,,,,,,,10645007.751407683
+,,,,,,,,,
+,Discount Rate,Year,ARO Liability - Open,Accretion,ARO Liability - Close,,,,
+,0.032,1,10229238.899018409,81833.91119214726,10311072.810210556,,,,
+,0.032,2,10311072.810210556,82488.58248168445,10393561.39269224,,,,
+,0.032,3,10393561.39269224,83148.49114153792,10476709.883833777,,,,
+,0.032,4,10476709.883833777,83813.67907067022,10560523.562904447,,,,
+,0.032,5,10560523.562904447,84484.18850323558,10645007.751407683,,,,
+,, , ,415768.85238927545,,,,,
+, , , , ,,,,,
